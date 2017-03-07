@@ -92,8 +92,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft)
     	// 	}
     	// }
 
-
-
         int maxMinScore = -1;
         for (int a = 0; a < 8; a ++)
         {
@@ -156,9 +154,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft)
             }
         }
     }
-
-
-
 
 
     // Only used when calling testminimax
