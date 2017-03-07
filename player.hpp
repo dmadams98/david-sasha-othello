@@ -13,7 +13,7 @@ public:
     ~Player();
 
     Move *doMove(Move *opponentsMove, int msLeft);
-    int getResultScore(Move *move);
+    int getResultScore(Board *b, Move *move, Side s);
 
     // Flag to tell if the player is running within the test_minimax context
     bool testingMinimax;
