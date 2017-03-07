@@ -6,32 +6,32 @@
 
 /* Map of the values of each square used in getResultScore
  *      _________________________________
- *      | 8 | 2 | 6 | 6 | 6 | 6 | 2 | 8 |
+ *      |100| 10| 60| 60| 60| 60| 10|100|
  *      |___|___|___|___|___|___|___|___|
- *      | 2 | 1 | 3 | 3 | 3 | 3 | 1 | 2 |
+ *      | 10| 1 | 30| 30| 30| 30| 1 | 10|
  *      |___|___|___|___|___|___|___|___|
- *      | 6 | 3 | 5 | 4 | 4 | 5 | 3 | 6 |
+ *      | 60| 30| 50| 40| 40| 50| 30| 60|
  *      |___|___|___|___|___|___|___|___|
- *      | 6 | 3 | 4 | 4 | 4 | 4 | 3 | 6 |
+ *      | 60| 30| 40| 40| 40| 40| 30| 60|
  *      |___|___|___|___|___|___|___|___|
- *      | 6 | 3 | 4 | 4 | 4 | 4 | 3 | 6 |
+ *      | 60| 30| 40| 40| 40| 40| 30| 60|
  *      |___|___|___|___|___|___|___|___|
- *      | 6 | 3 | 5 | 4 | 4 | 5 | 3 | 6 |
+ *      | 60| 30| 50| 40| 40| 50| 30| 60|
  *      |___|___|___|___|___|___|___|___|
- *      | 2 | 1 | 3 | 3 | 3 | 3 | 1 | 2 |
+ *      | 10| 1 | 30| 30| 30| 30| 1 | 10|
  *      |___|___|___|___|___|___|___|___|
- *      | 8 | 2 | 6 | 6 | 6 | 6 | 2 | 8 |
+ *      |100| 10| 60| 60| 60| 60| 10|100|
  *      |___|___|___|___|___|___|___|___|
  */
-int valueMap[64] = {8, 2, 6, 6, 6, 6, 2, 8,
-                    2, 1, 3, 3, 3, 3, 1, 2,
-                    6, 3, 5, 4, 4, 5, 3, 6,
-                    6, 3, 4, 4, 4, 4, 3, 6,
-                    6, 3, 4, 4, 4, 4, 3, 6,
-                    6, 3, 5, 4, 4, 5, 3, 6,
-                    2, 1, 3, 3, 3, 3, 1, 2,
-                    8, 2, 6, 6, 6, 6, 2, 8};
-                    
+int valueMap[64] = {100, 10, 60, 60, 60, 60, 10, 100,
+                    10, 1, 30, 30, 30, 30, 1, 10,
+                    60, 30, 50, 40, 40, 50, 30, 60,
+                    60, 30, 40, 40, 40, 40, 30, 60,
+                    60, 30, 40, 40, 40, 40, 30, 60,
+                    60, 30, 50, 40, 40, 50, 30, 60,
+                    10, 1, 30, 30, 30, 30, 1, 10,
+                    100, 10, 60, 60, 60, 60, 10, 100,};
+
 /*
  * Constructor for the player; initialize everything here. The side your AI is
  * on (BLACK or WHITE) is passed in as "side". The constructor must finish
@@ -97,7 +97,8 @@ Move *Player::doMove(Move *opponentsMove, int msLeft)
     	// 	}
     	// }
 
-     // 4 Deep Minimax using heuristic defined in getResultScore
+     // 4 deep minimax using heuristic defined in getResultScore
+
         int maxMinScore = -1;
         for (int a = 0; a < 8; a ++)
         {
@@ -108,7 +109,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft)
                 {
                     Board *newBoard1 = board->copy();
                     newBoard1->doMove(move1, side);
-                    int minScore = 513;
+                    int minScore = 6401;
                     for (int c = 0; c < 8; c ++)
                     {
                         for (int d = 0; d < 8; d ++)
@@ -117,13 +118,13 @@ Move *Player::doMove(Move *opponentsMove, int msLeft)
                             if (newBoard1->checkMove(move2, (side == BLACK) ? WHITE : BLACK))
                             {
                                 Board *newBoard2 = newBoard1->copy();
-                                newBoard2->doMove(move2, side);
+                                newBoard2->doMove(move2, (side == BLACK) ? WHITE : BLACK);
                                 for (int e = 0; e < 8; e ++)
                                 {
                                     for (int f = 0; f < 8; f ++)
                                     {
                                         Move *move3 = new Move(e, f);
-                                        if (board->checkMove(move3, side))
+                                        if (newBoard2->checkMove(move3, side))
                                         {
                                             Board *newBoard3 = newBoard2->copy();
                                             newBoard3->doMove(move3, side);
@@ -132,7 +133,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft)
                                                 for (int h = 0; h < 8; h ++)
                                                 {
                                                     Move *move4 = new Move(g, h);
-                                                    if (board->checkMove(move4, (side == BLACK) ? WHITE : BLACK))
+                                                    if (newBoard3->checkMove(move4, (side == BLACK) ? WHITE : BLACK))
                                                     {
                                                         int score = getResultScore(newBoard3, move4, (side == BLACK) ? WHITE : BLACK);
                                                         if (score < minScore)
@@ -180,7 +181,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft)
                     {
                         for (int l = 0; l < 8; l ++)
                         {
-                            Move *move2 = new Move(i, j);
+                            Move *move2 = new Move(k, l);
                             if (newBoard1->checkMove(move2, (side == BLACK) ? WHITE : BLACK))
                             {
                                 Board *newBoard2 = newBoard1->copy();
