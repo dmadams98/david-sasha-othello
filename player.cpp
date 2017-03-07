@@ -3,7 +3,8 @@
 // Another try
 
 #include "player.hpp"
-/* Map of the values of each square
+
+/* Map of the values of each square used in getResultScore
  *      _________________________________
  *      | 8 | 2 | 6 | 6 | 6 | 6 | 2 | 8 |
  *      |___|___|___|___|___|___|___|___|
@@ -30,6 +31,7 @@ int valueMap[64] = {8, 2, 6, 6, 6, 6, 2, 8,
                     6, 3, 5, 4, 4, 5, 3, 6,
                     2, 1, 3, 3, 3, 3, 1, 2,
                     8, 2, 6, 6, 6, 6, 2, 8};
+                    
 /*
  * Constructor for the player; initialize everything here. The side your AI is
  * on (BLACK or WHITE) is passed in as "side". The constructor must finish
@@ -71,6 +73,9 @@ Move *Player::doMove(Move *opponentsMove, int msLeft)
     // Normal method
     if (!testingMinimax)
     {
+
+     // Original, heuristic only no minimax
+
      //    int maxScore = -1;
      //    if (board->hasMoves(side))
     	// {
@@ -92,6 +97,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft)
     	// 	}
     	// }
 
+     // 4 Deep Minimax using heuristic defined in getResultScore
         int maxMinScore = -1;
         for (int a = 0; a < 8; a ++)
         {
@@ -218,4 +224,3 @@ int Player::getResultScore(Board *b, Move *move, Side s)
     delete newBoard;
     return score;
 }
-
