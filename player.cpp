@@ -23,14 +23,14 @@
  *      |100| 10| 60| 60| 60| 60| 10|100|
  *      |___|___|___|___|___|___|___|___|
  */
-int valueMap[64] = {100, 10, 60, 60, 60, 60, 10, 100,
-                    10, 1, 30, 30, 30, 30, 1, 10,
-                    60, 30, 50, 40, 40, 50, 30, 60,
-                    60, 30, 40, 40, 40, 40, 30, 60,
-                    60, 30, 40, 40, 40, 40, 30, 60,
-                    60, 30, 50, 40, 40, 50, 30, 60,
-                    10, 1, 30, 30, 30, 30, 1, 10,
-                    100, 10, 60, 60, 60, 60, 10, 100,};
+int valueMap[64] = {20, 2, 10, 10, 10, 10, 2, 20,
+                    2, 0, 4, 4, 4, 4, 0, 2,
+                    10, 4, 6, 5, 5, 6, 4, 10,
+                    10, 4, 5, 5, 5, 5, 4, 10,
+                    10, 4, 5, 5, 5, 5, 4, 10,
+                    10, 4, 6, 5, 5, 6, 4, 10,
+                    2, 0, 4, 4, 4, 4, 0, 2,
+                    20, 2, 10, 10, 10, 10, 2, 20,};
 
 /*
  * Constructor for the player; initialize everything here. The side your AI is
@@ -220,7 +220,9 @@ int Player::getResultScore(Board *b, Move *move, Side s)
 {
     Board *newBoard = b->copy();
     newBoard->doMove(move, s);
-    int score = newBoard->count(side);
+    int before = b->count(side) - b->count((side == BLACK) ? WHITE : BLACK);
+    int after = newBoard->count(side) - newBoard->count(((side == BLACK) ? WHITE : BLACK));
+    int score = (after - before);
     score *= valueMap[(move->getX() + 1) * (move->getY() + 1) - 1];
     delete newBoard;
     return score;
