@@ -1,3 +1,15 @@
-Caltech CS2 Assignment 9: Othello
+1. Particioants contribution:
 
-See [assignment9_part1.html](http://htmlpreview.github.io/?https://github.com/caltechcs2/othello/blob/master/assignment9_part1.html) and [assignment9_part2.html](http://htmlpreview.github.io/?https://github.com/caltechcs2/othello/blob/master/assignment9_part2.html)
+Sasha Bodrova :    - created the heuristic, changed and improved it until it was the most efficient; created the score calculation formula for the value of the possible move
+				- score = ( ( ((amount of our stones before the move) - (amount of  their stones before the move)) - ((amount of our stones after the move) - (amount of  their stones after the move)) ) * (the value of the box where we make the move) ) 
+			        - wrote this README file;
+
+David Adams : 	- set up the git repository 
+				- wrote the code for assignment 9 
+				- created 4-depth minmax algorithm
+ 				- wrote multitest.cpp, which runs the game 10 times
+                               
+
+2. Improvements:
+
+
