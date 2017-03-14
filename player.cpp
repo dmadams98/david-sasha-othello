@@ -74,92 +74,100 @@ Move *Player::doMove(Move *opponentsMove, int msLeft)
     if (!testingMinimax)
     {
 
-     // Original, heuristic only no minimax
-
-     //    int maxScore = -1;
-     //    if (board->hasMoves(side))
-    	// {
-    	// 	for (int i = 0; i < 8; i ++)
-    	// 	{
-    	// 		for (int j = 0; j < 8; j ++)
-    	// 		{
-     //                Move *move = new Move(i, j);
-    	// 			if (board->checkMove(move, side))
-    	// 			{
-     //                    int resultScore = getResultScore(board, move, side);
-     //                    if (resultScore > maxScore)
-     //                    {
-     //                        bestMove = move;
-     //                        maxScore = resultScore;
-     //                    }
-     //                }	
-    	// 		}
-    	// 	}
-    	// }
+        int maxScore = -1;
+        if (board->hasMoves(side))
+    	{
+    		for (int i = 0; i < 8; i ++)
+    		{
+    			for (int j = 0; j < 8; j ++)
+    			{
+                    Move *move = new Move(i, j);
+    				if (board->checkMove(move, side))
+    				{
+                        Board *newBoard = board->copy();
+                        newBoard->doMove(move, side);
+                        if (!newBoard->hasMoves((side == BLACK) ? WHITE : BLACK))
+                        {
+                            delete newBoard;
+                            board->doMove(move, side);
+                            return move;
+                        }
+                        int resultScore = getResultScore(board, move, side);
+                        if (resultScore > maxScore)
+                        {
+                            bestMove = move;
+                            maxScore = resultScore;
+                        }
+                        delete newBoard;
+                    }
+    			}
+    		}
+    	}
 
      // 4 deep minimax using heuristic defined in getResultScore
+     // Don't know why this doesn't work better
 
-        int maxMinScore = -1;
-        for (int a = 0; a < 8; a ++)
-        {
-            for (int b = 0; b < 8; b ++)
-            {
-                Move *move1 = new Move(a, b);
-                if (board->checkMove(move1, side))
-                {
-                    Board *newBoard1 = board->copy();
-                    newBoard1->doMove(move1, side);
-                    int minScore = 6401;
-                    for (int c = 0; c < 8; c ++)
-                    {
-                        for (int d = 0; d < 8; d ++)
-                        {
-                            Move *move2 = new Move(c, d);
-                            if (newBoard1->checkMove(move2, (side == BLACK) ? WHITE : BLACK))
-                            {
-                                Board *newBoard2 = newBoard1->copy();
-                                newBoard2->doMove(move2, (side == BLACK) ? WHITE : BLACK);
-                                for (int e = 0; e < 8; e ++)
-                                {
-                                    for (int f = 0; f < 8; f ++)
-                                    {
-                                        Move *move3 = new Move(e, f);
-                                        if (newBoard2->checkMove(move3, side))
-                                        {
-                                            Board *newBoard3 = newBoard2->copy();
-                                            newBoard3->doMove(move3, side);
-                                            for (int g = 0; g < 8; g ++)
-                                            {
-                                                for (int h = 0; h < 8; h ++)
-                                                {
-                                                    Move *move4 = new Move(g, h);
-                                                    if (newBoard3->checkMove(move4, (side == BLACK) ? WHITE : BLACK))
-                                                    {
-                                                        int score = getResultScore(newBoard3, move4, (side == BLACK) ? WHITE : BLACK);
-                                                        if (score < minScore)
-                                                        {
-                                                            minScore = score;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            delete newBoard3;
-                                        }
-                                    }
-                                }
-                                delete newBoard2;
-                            }
-                        }
-                    }
-                    if (minScore > maxMinScore)
-                    {
-                        maxMinScore = minScore;
-                        bestMove = move1;
-                    }
-                    delete newBoard1;
-                }
-            }
-        }
+        // int maxMinScore = -1;
+        // for (int a = 0; a < 8; a ++)
+        // {
+        //     for (int b = 0; b < 8; b ++)
+        //     {
+        //         Move *move1 = new Move(a, b);
+        //         if (board->checkMove(move1, side))
+        //         {
+        //             Board *newBoard1 = board->copy();
+        //             newBoard1->doMove(move1, side);
+        //             int minScore = 1281;
+        //             for (int c = 0; c < 8; c ++)
+        //             {
+        //                 for (int d = 0; d < 8; d ++)
+        //                 {
+        //                     Move *move2 = new Move(c, d);
+        //                     if (newBoard1->checkMove(move2, (side == BLACK) ? WHITE : BLACK))
+        //                     {
+        //                         Board *newBoard2 = newBoard1->copy();
+        //                         newBoard2->doMove(move2, (side == BLACK) ? WHITE : BLACK);
+        //                         for (int e = 0; e < 8; e ++)
+        //                         {
+        //                             for (int f = 0; f < 8; f ++)
+        //                             {
+        //                                 Move *move3 = new Move(e, f);
+        //                                 if (newBoard2->checkMove(move3, side))
+        //                                 {
+        //                                     Board *newBoard3 = newBoard2->copy();
+        //                                     newBoard3->doMove(move3, side);
+        //                                     for (int g = 0; g < 8; g ++)
+        //                                     {
+        //                                         for (int h = 0; h < 8; h ++)
+        //                                         {
+        //                                             Move *move4 = new Move(g, h);
+        //                                             if (newBoard3->checkMove(move4, (side == BLACK) ? WHITE : BLACK))
+        //                                             {
+        //                                                 int score = getResultScore(newBoard3, move4, (side == BLACK) ? WHITE : BLACK);
+        //                                                 if (score < minScore)
+        //                                                 {
+        //                                                     minScore = score;
+        //                                                 }
+        //                                             }
+        //                                         }
+        //                                     }
+        //                                     delete newBoard3;
+        //                                 }
+        //                             }
+        //                         }
+        //                         delete newBoard2;
+        //                     }
+        //                 }
+        //             }
+        //             if (minScore > maxMinScore)
+        //             {
+        //                 maxMinScore = minScore;
+        //                 bestMove = move1;
+        //             }
+        //             delete newBoard1;
+        //         }
+        //     }
+        // }
     }
 
 
@@ -220,8 +228,8 @@ int Player::getResultScore(Board *b, Move *move, Side s)
 {
     Board *newBoard = b->copy();
     newBoard->doMove(move, s);
-    int before = b->count(side) - b->count((side == BLACK) ? WHITE : BLACK);
-    int after = newBoard->count(side) - newBoard->count(((side == BLACK) ? WHITE : BLACK));
+    int before = b->count(s) - b->count((s == BLACK) ? WHITE : BLACK);
+    int after = newBoard->count(s) - newBoard->count(((s == BLACK) ? WHITE : BLACK));
     int score = (after - before);
     score *= valueMap[(move->getX() + 1) * (move->getY() + 1) - 1];
     delete newBoard;
